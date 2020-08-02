@@ -18,6 +18,8 @@ using MicroElements.Swashbuckle.FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
 using API.Services;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace API
 {
@@ -53,7 +55,8 @@ namespace API
 
             services.AddCors();
 
-            // Add Hangfire services.
+            CreateDatabaseIfNotExists("Data Source=.;Initial Catalog=master;Trusted_Connection=True;", "HangfireTest");
+
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
@@ -64,10 +67,11 @@ namespace API
                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
                     QueuePollInterval = TimeSpan.Zero,
                     UseRecommendedIsolationLevel = true,
-                    DisableGlobalLocks = true
+                    DisableGlobalLocks = true,
+                    EnableHeavyMigrations = true
                 }));
 
-            // Add the processing server as IHostedService
+
             services.AddHangfireServer();
 
             services.AddMvc(options =>
@@ -75,8 +79,6 @@ namespace API
                     options.EnableEndpointRouting = false;
                     options.Filters.Add(typeof(ValidationFilter));
                 });
-            //.AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddSwaggerDocumentation();
 
@@ -97,7 +99,7 @@ namespace API
 
         }
 
-        public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs)
+        public void Configure(IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 
@@ -129,8 +131,8 @@ namespace API
             });
             app.UseDefaultFiles();
             app.UseHangfireDashboard();
-
             RecurringJob.AddOrUpdate<ProductService>(x => x.UpdateLocalUrl(), Cron.Daily);
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -142,5 +144,23 @@ namespace API
                 endpoints.MapControllers();
             });
         }
+
+
+        private static void CreateDatabaseIfNotExists(string connectionString, string dbName)
+        {
+            SqlCommand cmd = null;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (cmd = new SqlCommand($"If(db_id(N'{dbName}') IS NULL) CREATE DATABASE [{dbName}]", connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
+
+
 }

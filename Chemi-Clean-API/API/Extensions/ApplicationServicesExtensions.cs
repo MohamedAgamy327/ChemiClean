@@ -2,7 +2,6 @@
 using Core.UnitOfWork;
 using Core.IRepository;
 using Core.Repository;
-using API.Services;
 
 namespace API.Extensions
 {

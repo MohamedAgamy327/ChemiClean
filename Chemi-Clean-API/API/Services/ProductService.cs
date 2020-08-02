@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Core.IRepository;
+﻿using Core.IRepository;
 using Core.UnitOfWork;
 using System;
 using System.IO;
@@ -10,12 +9,10 @@ namespace API.Services
 {
     public class ProductService
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
-        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, IProductRepository productRepository)
+        public ProductService(IUnitOfWork unitOfWork, IProductRepository productRepository)
         {
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
         }
