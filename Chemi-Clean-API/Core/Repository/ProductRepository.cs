@@ -24,7 +24,10 @@ namespace Core.Repository
         {
             return await _context.Products.OrderByDescending(o => o.Id).ToListAsync();
         }
-
+        public async Task<IEnumerable<Product>> GetRemoteAsync()
+        {
+            return await _context.Products.Where(w => string.IsNullOrEmpty(w.LocalUrl)).ToListAsync();
+        }
         public async Task<IEnumerable<Product>> GetAsync(int page, int size, string term)
         {
             return await _context.Products

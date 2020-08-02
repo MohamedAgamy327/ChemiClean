@@ -19,7 +19,7 @@ namespace API.Services
 
         public async Task UpdateLocalUrl()
         {
-            var products = await _productRepository.GetAsync().ConfigureAwait(true);
+            var products = await _productRepository.GetRemoteAsync().ConfigureAwait(true);
             Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Content"));
             Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Content/PDF"));
             foreach (var product in products)
