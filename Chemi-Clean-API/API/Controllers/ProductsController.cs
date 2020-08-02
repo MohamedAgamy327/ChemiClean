@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Core.UnitOfWork;
 using Core.IRepository;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -29,6 +30,20 @@ namespace API.Controllers
         {
             List<ProductForGetDTO> contracts = _mapper.Map<List<ProductForGetDTO>>(await _contractRepository.GetAsync().ConfigureAwait(true));
             return Ok(contracts);
+        }
+
+        [HttpGet("download")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Download()
+        {
+            using (WebClient wc = new WebClient())
+            {
+                wc.DownloadFileAsync(
+                    new System.Uri("http://www.delaval.dk/ImageVaultFiles/id_6409/cf_5/DeLavalMastitisTestCMT.pdf"),
+                    "D:\\1.pdf"
+                );
+            }
+            return Ok();
         }
     }
 }
