@@ -41,13 +41,13 @@ namespace Core.Repository
         {
             return await _context.Products.AnyAsync(s => s.Id == id).ConfigureAwait(true);
         }
-        public async Task<bool> IsExist(string name)
+        public async Task<bool> IsExist(string productName)
         {
-            return await _context.Products.AnyAsync(s => s.Name.ToLower() == name.ToLower()).ConfigureAwait(true);
+            return await _context.Products.AnyAsync(s => s.ProductName.ToLower() == productName.ToLower()).ConfigureAwait(true);
         }
-        public async Task<bool> IsExist(int id, string name)
+        public async Task<bool> IsExist(int id, string productName)
         {
-            return await _context.Products.AnyAsync(s => s.Id != id && s.Name.ToLower() == name.ToLower()).ConfigureAwait(true);
+            return await _context.Products.AnyAsync(s => s.Id != id && s.ProductName.ToLower() == productName.ToLower()).ConfigureAwait(true);
         }
     }
 }

@@ -9,7 +9,8 @@ namespace Data.EntitiesMap
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(t => t.Id);
-            builder.Property(t => t.Name).IsRequired();
+            builder.Property(t => t.ProductName).IsRequired();
+            builder.Property(t => t.Url).IsRequired();
         }
     }
 }

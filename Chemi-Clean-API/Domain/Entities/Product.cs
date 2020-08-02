@@ -2,9 +2,12 @@
 {
     public class Product : BaseEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string FileName { get; set; }
+        public string ProductName { get; set; }
+        public string SupplierName { get; set; }
+        public string Url { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string LocalUrl { get; set; }
 
     }
 }

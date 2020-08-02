@@ -12,7 +12,7 @@ namespace API.MappingProfile
             CreateMap<ProductForEditDTO, Product>();
 
             CreateMap<Product, ProductForGetDTO>()
-                      .ForMember(dest => dest.Path, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.FileName) ? $"Contract/{src.Id}/{src.FileName}" : null));
+                      .ForMember(dest => dest.Path, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.LocalUrl) ? src.LocalUrl : src.Url));
         }
     }
 }
