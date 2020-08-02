@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.DTO.Contract
+namespace API.DTO.Product
 {
     public class ProductForFileDTO
     {

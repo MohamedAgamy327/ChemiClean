@@ -1,7 +1,7 @@
-﻿using API.DTO.Contract;
+﻿using API.DTO.Product;
 using FluentValidation;
 
-namespace API.Validator.Contract
+namespace API.Validator.Product
 {
     public class ProductForEditDTOValidator : AbstractValidator<ProductForEditDTO>
     {

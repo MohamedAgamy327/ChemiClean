@@ -1,4 +1,4 @@
-﻿namespace API.DTO.Contract
+﻿namespace API.DTO.Product
 {
     public class ProductForEditDTO
     {

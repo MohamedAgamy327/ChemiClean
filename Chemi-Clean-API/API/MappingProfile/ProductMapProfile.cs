@@ -1,4 +1,4 @@
-﻿using API.DTO.Contract;
+﻿using API.DTO.Product;
 using AutoMapper;
 using Domain.Entities;
 

@@ -15,6 +15,9 @@ using System;
 using API.Middleware;
 using Microsoft.Extensions.FileProviders;
 using MicroElements.Swashbuckle.FluentValidation;
+using Hangfire;
+using Hangfire.SqlServer;
+using API.Services;
 
 namespace API
 {
@@ -50,13 +53,30 @@ namespace API
 
             services.AddCors();
 
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
             services.AddMvc(options =>
                 {
                     options.EnableEndpointRouting = false;
                     options.Filters.Add(typeof(ValidationFilter));
                 });
-                //.AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
-                //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //.AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddSwaggerDocumentation();
 
@@ -77,7 +97,7 @@ namespace API
 
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs)
         {
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 
@@ -108,6 +128,9 @@ namespace API
                 RequestPath = "/content"
             });
             app.UseDefaultFiles();
+            app.UseHangfireDashboard();
+
+            RecurringJob.AddOrUpdate<ProductService>(x => x.UpdateLocalUrl(), Cron.Daily);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

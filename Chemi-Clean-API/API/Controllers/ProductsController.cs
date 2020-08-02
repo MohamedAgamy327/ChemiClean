@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.DTO.Contract;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Core.UnitOfWork;
 using Core.IRepository;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using API.DTO.Product;
 
 namespace API.Controllers
 {
@@ -16,20 +16,20 @@ namespace API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IProductRepository _contractRepository;
-        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork, IProductRepository contractRepository)
+        private readonly IProductRepository _productRepository;
+        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork, IProductRepository productRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _contractRepository = contractRepository;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IReadOnlyList<ProductForGetDTO>>> Get()
         {
-            List<ProductForGetDTO> contracts = _mapper.Map<List<ProductForGetDTO>>(await _contractRepository.GetAsync().ConfigureAwait(true));
-            return Ok(contracts);
+            List<ProductForGetDTO> products = _mapper.Map<List<ProductForGetDTO>>(await _productRepository.GetAsync().ConfigureAwait(true));
+            return Ok(products);
         }
 
         [HttpGet("download")]
@@ -39,7 +39,7 @@ namespace API.Controllers
             using (WebClient wc = new WebClient())
             {
                 wc.DownloadFileAsync(
-                    new System.Uri("http://www.delaval.dk/ImageVaultFiles/id_6409/cf_5/DeLavalMastitisTestCMT.pdf"),
+                    new System.Uri("http://www.tanaco.dk/cms/modules/ContentExpress/img_repository/RTU%20Xtra,%20bic.pdf"),
                     "D:\\1.pdf"
                 );
             }
