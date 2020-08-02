@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\Projects\Me\Dr Wessam\Dr Wessam\Wessam</_PublishTargetUrl>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAs8Sz9DU+EkeQKjgQ4b39EwAAAAACAAAAAAAQZgAAAAEAACAAAADuDKRypXHh3IXKHjvaCpbIghlgfM1RVjzv7AEFbWXMqAAAAAAOgAAAAAIAACAAAACauD4S442zWu0CuMgH6m62MT2TwxKlWWuF3C4C553zwyAAAAAVEMlere6YdLH6tDP1CSbFGHwzPke4rx9+hklEaeXNvUAAAABzOGcSnTwuaL2xxf98aKl8eVaqQdzqIFG5GmhncbWJ0AsZzYxjy2GUDVY2hCn8T1CH/H+6JNAR1DKuYPJvP01d</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=SQL5063.site4now.net%3bInitial Catalog=DB_A50E0C_MomenBookingDB%3bUser Id=DB_A50E0C_MomenBookingDB_admin%3bPassword=momen2020</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
