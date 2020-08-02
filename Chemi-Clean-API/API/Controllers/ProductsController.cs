@@ -20,12 +20,13 @@ namespace API.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpGet]
+        [HttpGet("{page:int}/{size:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IReadOnlyList<ProductForGetDTO>>> Get()
+        public async Task<ActionResult<IReadOnlyList<ProductForGetDTO>>> Get(int page, int size, [FromQuery(Name = "term")] string term)
         {
-            List<ProductForGetDTO> products = _mapper.Map<List<ProductForGetDTO>>(await _productRepository.GetAsync().ConfigureAwait(true));
-            return Ok(products);
+            List<ProductForGetDTO> products = _mapper.Map<List<ProductForGetDTO>>(await _productRepository.GetAsync(page, size, term).ConfigureAwait(true));
+            int count = await _productRepository.GetCountAsync(term).ConfigureAwait(true);
+            return Ok(new ProductPagingDTO { Count = count, Products = products });
         }
     }
 }

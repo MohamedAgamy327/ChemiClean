@@ -15,39 +15,31 @@ namespace Core.Repository
         {
             _context = context;
         }
-        public async Task<Product> AddAsync(Product contract)
-        {
-            await _context.Products.AddAsync(contract);
-            return contract;
-        }
         public Product Edit(Product contract)
         {
             _context.Entry(contract).State = EntityState.Modified;
             return contract;
         }
-        public async Task<Product> GetAsync(int id)
-        {
-            return await _context.Products.AsNoTracking().SingleOrDefaultAsync(s => s.Id == id);
-        }
         public async Task<IEnumerable<Product>> GetAsync()
         {
             return await _context.Products.OrderByDescending(o => o.Id).ToListAsync();
         }
-        public void Remove(Product contract)
+
+        public async Task<IEnumerable<Product>> GetAsync(int page, int size, string term)
         {
-            _context.Remove(contract);
+            return await _context.Products
+           .Where(w => string.IsNullOrEmpty(term)
+           || w.ProductName.Contains(term)
+           || w.SupplierName.Contains(term))
+           .OrderByDescending(d => d.Id)
+           .Skip((page - 1) * size).ToListAsync();
         }
-        public async Task<bool> IsExist(int id)
+        public async Task<int> GetCountAsync(string term)
         {
-            return await _context.Products.AnyAsync(s => s.Id == id).ConfigureAwait(true);
-        }
-        public async Task<bool> IsExist(string productName)
-        {
-            return await _context.Products.AnyAsync(s => s.ProductName.ToLower() == productName.ToLower()).ConfigureAwait(true);
-        }
-        public async Task<bool> IsExist(int id, string productName)
-        {
-            return await _context.Products.AnyAsync(s => s.Id != id && s.ProductName.ToLower() == productName.ToLower()).ConfigureAwait(true);
+            return await _context.Products
+            .Where(w => string.IsNullOrEmpty(term)
+            || w.ProductName.Contains(term)
+            || w.SupplierName.Contains(term)).CountAsync();
         }
     }
 }
