@@ -9,7 +9,7 @@ namespace API.MappingProfile
         public ContractMappingProfile()
         {           
             CreateMap<Product, ProductForGetDTO>()
-                      .ForMember(dest => dest.Path, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.LocalUrl) ? src.LocalUrl : src.Url));
+                      .ForMember(dest => dest.Path, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.LocalUrl) ? $"https://localhost:44364/Contract/PDF/{src.Id}/{src.LocalUrl}" : src.Url));
         }
     }
 }

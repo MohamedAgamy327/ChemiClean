@@ -28,5 +28,13 @@ namespace API.Controllers
             int count = await _productRepository.GetCountAsync(term).ConfigureAwait(true);
             return Ok(new ProductPagingDTO { Count = count, Products = products });
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IReadOnlyList<ProductForGetDTO>>> Get()
+        {
+            List<ProductForGetDTO> products = _mapper.Map<List<ProductForGetDTO>>(await _productRepository.GetAsync().ConfigureAwait(true));
+            return Ok(products);
+        }
     }
 }
